@@ -13,8 +13,11 @@ class FlutterShareMe {
   static const String _methodWhatsAppBusiness = 'whatsapp_business_share';
   static const String _methodFaceBook = 'facebook_share';
   static const String _methodMessenger = 'messenger_share';
+  static const String _methodMessengerNew = 'messenger_share_new';
   static const String _methodTwitter = 'twitter_share';
+  static const String _methodTwitterNew = 'twitter_share_new';
   static const String _methodInstagramShare = 'instagram_share';
+  static const String _methodInstagramShareNew = 'instagram_share_new';
   static const String _methodSystemShare = 'system_share';
   static const String _methodTelegramShare = 'telegram_share';
 
@@ -179,4 +182,56 @@ class FlutterShareMe {
     }
     return result;
   }
+
+
+  ///share text to instagram
+    Future<String?> shareToInstagramNew(
+        {required String msg}) async {
+      final Map<String, dynamic> arguments = <String, dynamic>{};
+      arguments.putIfAbsent('msg', () => msg);
+
+      String? result;
+
+      try {
+        result =
+            await _channel.invokeMethod<String>(_methodInstagramShareNew, arguments);
+      } catch (e) {
+        return e.toString();
+      }
+      return result;
+    }
+  
+
+  Future<String?> shareToTwitterNew(
+      {required String msg}) async {
+    final Map<String, dynamic> arguments = <String, dynamic>{};
+    arguments.putIfAbsent('msg', () => msg);
+
+    String? result;
+
+    try {
+      result =
+          await _channel.invokeMethod<String>(_methodTwitterNew, arguments);
+    } catch (e) {
+      return e.toString();
+    }
+    return result;
+  }
+
+  Future<String?> shareToMessengerNew(
+      {required String msg}) async {
+    final Map<String, dynamic> arguments = <String, dynamic>{};
+    arguments.putIfAbsent('msg', () => msg);
+
+    String? result;
+
+    try {
+      result =
+      await _channel.invokeMethod<String>(_methodMessengerNew, arguments);
+    } catch (e) {
+      return e.toString();
+    }
+    return result;
+  }
+
 }
