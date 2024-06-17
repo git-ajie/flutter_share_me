@@ -14,7 +14,8 @@ enum Share {
   share_system,
   share_instagram,
   share_telegram,
-  share_line
+  share_line,
+  check_installed_apps
 }
 
 void main() => runApp(MyApp());
@@ -76,6 +77,10 @@ class _MyAppState extends State<MyApp> {
                 onPressed: () => onButtonTap(Share.share_line),
                 child: const Text('share to Line'),
               ),
+              ElevatedButton(
+                onPressed: () => onButtonTap(Share.check_installed_apps),
+                child: const Text('Check Installed Apps'),
+              ),
             ],
           ),
         ),
@@ -133,13 +138,17 @@ class _MyAppState extends State<MyApp> {
             message: msg, phoneNumber: 'phone-number-with-country-code');
         break;
       case Share.share_instagram:
-        response = await flutterShareMe.shareToInstagram(filePath: file!.path);
+        response = await flutterShareMe.shareToInstagramNew(msg: msg);
         break;
       case Share.share_telegram:
         response = await flutterShareMe.shareToTelegram(msg: msg);
         break;
       case Share.share_line:
         response = await flutterShareMe.shareToLine(msg: msg);
+        break;
+      case Share.check_installed_apps:
+        final result = await flutterShareMe.checkInstalledAppsForShare();
+        print('installedApps $result');
         break;
     }
     debugPrint(response);

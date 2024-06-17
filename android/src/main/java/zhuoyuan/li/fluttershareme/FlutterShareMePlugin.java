@@ -4,6 +4,7 @@ package zhuoyuan.li.fluttershareme;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
@@ -29,7 +30,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
@@ -62,6 +65,7 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
     final private static String _methodInstagramShareNew = "instagram_share_new";
     final private static String _methodTelegramShare = "telegram_share";
     final private static String _methodLineShare = "line_share";
+    final private static String _methodCheckInstalledApps = "check_installed_apps";
 
 
     private Activity activity;
@@ -164,6 +168,9 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
             case _methodLineShare:
                 msg = call.argument("msg");
                 shareToLine(msg, result);
+                break;
+            case _methodCheckInstalledApps:
+                checkInstalledApps(result);
                 break;
             default:
                 result.notImplemented();
@@ -536,8 +543,49 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
         }
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(url));
+        i.setPackage("jp.naver.line.android");
         activity.startActivity(i);
         result.success("success");
+    }
+
+    private void checkInstalledApps(Result result) {
+        Map<String, Boolean> apps = new HashMap<>();
+        // Assigning package manager
+        PackageManager pm = activity.getPackageManager();
+        // Get a list of installed apps.
+        List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+
+//         Intent to check if SMS app exists
+//        Intent intent = new Intent(Intent.ACTION_SENDTO);
+//        intent.addCategory(Intent.CATEGORY_DEFAULT);
+//        intent.setType("vnd.android-dir/mms-sms");
+//        intent.setData(Uri.parse("sms:"));
+//        List<ResolveInfo> resolvedActivities = pm.queryIntentActivities(intent, 0);
+//        // If SMS app exists
+//        apps.put("sms", !resolvedActivities.isEmpty());
+
+        // Check other apps
+        Map<String, String> appPackages = new HashMap<>();
+        appPackages.put("instagram", "com.instagram.android");
+        appPackages.put("facebook", "com.facebook.katana");
+        appPackages.put("twitter", "com.twitter.android");
+        appPackages.put("whatsapp", "com.whatsapp");
+        appPackages.put("telegram", "org.telegram.messenger");
+        appPackages.put("line", "jp.naver.line.android");
+
+        for (Map.Entry<String, String> entry : appPackages.entrySet()) {
+            String appName = entry.getKey();
+            String packageName = entry.getValue();
+            boolean isInstalled = false;
+            for (ApplicationInfo packageInfo : packages) {
+                if (packageInfo.packageName.equals(packageName)) {
+                    isInstalled = true;
+                    break;
+                }
+            }
+            apps.put(appName, isInstalled);
+        }
+        result.success(apps);
     }
 
     @Override
