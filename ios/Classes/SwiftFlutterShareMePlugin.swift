@@ -13,6 +13,7 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
     let _methodInstagram = "instagram_share";
     let _methodSystemShare = "system_share";
     let _methodTelegramShare = "telegram_share";
+    let _methodLineShare  = "line_share";
     
     var result: FlutterResult?
     var documentInteractionController: UIDocumentInteractionController?
@@ -74,6 +75,10 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
             let args = call.arguments as? Dictionary<String,Any>
             shareToTelegram(message: args!["msg"] as! String, result: result )
         }
+        else if(call.method.elementsEqual(_methodLineShare)){
+            let args = call.arguments as? Dictionary<String,Any>
+            shareToLine(message: args!["msg"] as! String, result: result)
+        }
         else{
             let args = call.arguments as? Dictionary<String,Any>
             systemShare(message: args!["msg"] as! String,result: result)
@@ -98,7 +103,7 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
         {
             if(imageUrl==""){
                 //mean user did not pass image url  so just got with text message
-                result("Sucess");
+                result("Success");
                 UIApplication.shared.openURL(whatsAppURL! as URL)
                 
             }
@@ -131,7 +136,7 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
                     activityVC.excludedActivityTypes = [UIActivity.ActivityType.airDrop,UIActivity.ActivityType.message, UIActivity.ActivityType.mail,UIActivity.ActivityType.postToTwitter,UIActivity.ActivityType.postToWeibo,UIActivity.ActivityType.print,UIActivity.ActivityType.openInIBooks,UIActivity.ActivityType.postToFlickr,UIActivity.ActivityType.postToFacebook,UIActivity.ActivityType.addToReadingList,UIActivity.ActivityType.copyToPasteboard,UIActivity.ActivityType.postToFacebook]
                     
                     viewController!.present(activityVC, animated: true, completion: nil)
-                    result("Sucess");
+                    result("Success");
                     
                 }catch{
                     print(error)
@@ -158,7 +163,7 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
         if UIApplication.shared.canOpenURL(whatsAppURL! as URL)
         {
             UIApplication.shared.openURL(whatsAppURL! as URL)
-            result("Sucess");
+            result("Success");
         }else{
             result(FlutterError(code: "Not found", message: "WhatsApp is not found", details: "WhatsApp not intalled or Check url scheme."));
         }
@@ -172,7 +177,7 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
         let whatsAppURL  = NSURL(string: whatsApp.addingPercentEncoding(withAllowedCharacters: characterSet)!)
         if UIApplication.shared.canOpenURL(whatsAppURL! as URL)
         {
-            result("Sucess");
+            result("Success");
             UIApplication.shared.openURL(whatsAppURL! as URL)
         }
         else
@@ -193,7 +198,7 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
         let shareDialog = ShareDialog(viewController: viewController, content: shareContent, delegate: self)
         shareDialog.mode = .automatic
         shareDialog.show();
-        result("Sucess")
+        result("Success")
         
     }
     
@@ -216,7 +221,7 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
         do {
             if UIApplication.shared.canOpenURL(urlschme! as URL){
                 UIApplication.shared.openURL(urlschme!)
-                result("Sucess")
+                result("Success")
             }else{
                 result(FlutterError(code: "Not found", message: "Twitter is not found", details: "Twitter not intalled or Check url scheme."));
                 
@@ -234,7 +239,7 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
         let telegramURL  = NSURL(string: telegram.addingPercentEncoding(withAllowedCharacters: characterSet)!)
         if UIApplication.shared.canOpenURL(telegramURL! as URL)
         {
-            result("Sucess");
+            result("Success");
             UIApplication.shared.openURL(telegramURL! as URL)
         }
         else
@@ -263,7 +268,7 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
             }
         }
         viewController!.present(activityVC, animated: true, completion: nil)
-        result("Sucess");
+        result("Success");
         
         
     }
@@ -312,6 +317,23 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
         
         } catch {
             print("Fail")
+        }
+    }
+
+    func shareToLine(message:String, result: @escaping FlutterResult)  {
+        let lineApp = "https://line.me/R/share?text=\(message)"
+        var characterSet = CharacterSet.urlQueryAllowed
+        characterSet.insert(charactersIn: "?&")
+
+        let lineAppURL  = NSURL(string: lineApp.addingPercentEncoding(withAllowedCharacters: characterSet)!)
+        if UIApplication.shared.canOpenURL(lineAppURL! as URL)
+        {
+            result("Success");
+            UIApplication.shared.openURL(lineAppURL! as URL)
+        }
+        else
+        {
+            result(FlutterError(code: "Not found", message: "Line is not found", details: "Line not installed or Check url scheme."));
         }
     }
     

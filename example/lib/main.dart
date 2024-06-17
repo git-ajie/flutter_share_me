@@ -13,7 +13,8 @@ enum Share {
   whatsapp_business,
   share_system,
   share_instagram,
-  share_telegram
+  share_telegram,
+  share_line
 }
 
 void main() => runApp(MyApp());
@@ -42,9 +43,7 @@ class _MyAppState extends State<MyApp> {
               const SizedBox(height: 30),
               ElevatedButton(onPressed: pickImage, child: Text('Pick Image')),
               ElevatedButton(onPressed: pickVideo, child: Text('Pick Video')),
-              ElevatedButton(
-                  onPressed: () => onButtonTap(Share.twitter),
-                  child: const Text('share to twitter')),
+              ElevatedButton(onPressed: () => onButtonTap(Share.twitter), child: const Text('share to twitter')),
               ElevatedButton(
                 onPressed: () => onButtonTap(Share.whatsapp),
                 child: const Text('share to WhatsApp'),
@@ -73,6 +72,10 @@ class _MyAppState extends State<MyApp> {
                 onPressed: () => onButtonTap(Share.share_system),
                 child: const Text('share to System'),
               ),
+              ElevatedButton(
+                onPressed: () => onButtonTap(Share.share_line),
+                child: const Text('share to Line'),
+              ),
             ],
           ),
         ),
@@ -99,8 +102,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> onButtonTap(Share share) async {
-    String msg =
-        'Flutter share is great!!\n Check out full example at https://pub.dev/packages/flutter_share_me';
+    String msg = 'Flutter share is great!!\n Check out full example at https://pub.dev/packages/flutter_share_me';
     String url = 'https://pub.dev/packages/flutter_share_me';
 
     String? response;
@@ -115,8 +117,7 @@ class _MyAppState extends State<MyApp> {
       case Share.whatsapp:
         if (file != null) {
           response = await flutterShareMe.shareToWhatsApp(
-              imagePath: file!.path,
-              fileType: videoEnable ? FileType.video : FileType.image);
+              imagePath: file!.path, fileType: videoEnable ? FileType.video : FileType.image);
         } else {
           response = await flutterShareMe.shareToWhatsApp(msg: msg);
         }
@@ -136,6 +137,9 @@ class _MyAppState extends State<MyApp> {
         break;
       case Share.share_telegram:
         response = await flutterShareMe.shareToTelegram(msg: msg);
+        break;
+      case Share.share_line:
+        response = await flutterShareMe.shareToLine(msg: msg);
         break;
     }
     debugPrint(response);
