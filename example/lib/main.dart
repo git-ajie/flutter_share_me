@@ -132,7 +132,7 @@ class _MyAppState extends State<MyApp> {
             message: msg, phoneNumber: 'phone-number-with-country-code');
         break;
       case Share.share_instagram:
-        response = await flutterShareMe.shareToInstagram(imagePath: file!.path);
+        response = await flutterShareMe.shareToInstagram(filePath: file!.path);
         break;
       case Share.share_telegram:
         response = await flutterShareMe.shareToTelegram(msg: msg);
