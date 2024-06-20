@@ -14,6 +14,7 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
     let _methodSystemShare = "system_share";
     let _methodTelegramShare = "telegram_share";
     let _methodLineShare  = "line_share";
+    let _methodCheckInstalledApps = "check_installed_apps";
     
     var result: FlutterResult?
     var documentInteractionController: UIDocumentInteractionController?
@@ -78,6 +79,9 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
         else if(call.method.elementsEqual(_methodLineShare)){
             let args = call.arguments as? Dictionary<String,Any>
             shareToLine(message: args!["msg"] as! String, result: result)
+        }
+        else if(call.method.elementsEqual(_methodCheckInstalledApps)){
+            checkInstalledApps(result: result)
         }
         else{
             let args = call.arguments as? Dictionary<String,Any>
@@ -335,6 +339,29 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
         {
             result(FlutterError(code: "Not found", message: "Line is not found", details: "Line not installed or Check url scheme."));
         }
+    }
+    
+    func checkInstalledApps(result: @escaping FlutterResult) {
+        var installedApps: [String: Bool] = [:]
+
+        let appSchemes = [
+            ("instagram-stories://", "instagram"),
+            ("facebook-stories://", "facebook"),
+            ("twitter://", "twitter"),
+//            ("sms://", "sms"),
+            ("whatsapp://", "whatsapp"),
+            ("tg://", "telegram"),
+            ("line://", "line")
+        ]
+
+        for (scheme, key) in appSchemes {
+            if let url = URL(string: scheme), UIApplication.shared.canOpenURL(url) {
+                installedApps[key] = true
+            } else {
+                installedApps[key] = false
+            }
+        }
+        result(installedApps)
     }
     
     //Facebook delegate methods
