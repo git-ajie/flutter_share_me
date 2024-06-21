@@ -111,43 +111,42 @@ class _MyAppState extends State<MyApp> {
     String url = 'https://pub.dev/packages/flutter_share_me';
 
     String? response;
-    final FlutterShareMe flutterShareMe = FlutterShareMe();
     switch (share) {
       case Share.facebook:
-        response = await flutterShareMe.shareToFacebook(url: url, msg: msg);
+        response = await FlutterShareMe.shareToFacebook(url: url, msg: msg);
         break;
       case Share.twitter:
-        response = await flutterShareMe.shareToTwitter(url: url, msg: msg);
+        response = await FlutterShareMe.shareToTwitter(url: url, msg: msg);
         break;
       case Share.whatsapp:
         if (file != null) {
-          response = await flutterShareMe.shareToWhatsApp(
+          response = await FlutterShareMe.shareToWhatsApp(
               imagePath: file!.path, fileType: videoEnable ? FileType.video : FileType.image);
         } else {
-          response = await flutterShareMe.shareToWhatsApp(msg: msg);
+          response = await FlutterShareMe.shareToWhatsApp(msg: msg);
         }
         break;
       case Share.whatsapp_business:
-        response = await flutterShareMe.shareToWhatsApp(msg: msg);
+        response = await FlutterShareMe.shareToWhatsApp(msg: msg);
         break;
       case Share.share_system:
-        response = await flutterShareMe.shareToSystem(msg: msg);
+        response = await FlutterShareMe.shareToSystem(msg: msg);
         break;
       case Share.whatsapp_personal:
-        response = await flutterShareMe.shareWhatsAppPersonalMessage(
+        response = await FlutterShareMe.shareWhatsAppPersonalMessage(
             message: msg, phoneNumber: 'phone-number-with-country-code');
         break;
       case Share.share_instagram:
-        response = await flutterShareMe.shareToInstagramNew(msg: msg);
+        response = await FlutterShareMe.shareToInstagramNew(msg: msg);
         break;
       case Share.share_telegram:
-        response = await flutterShareMe.shareToTelegram(msg: msg);
+        response = await FlutterShareMe.shareToTelegram(msg: msg);
         break;
       case Share.share_line:
-        response = await flutterShareMe.shareToLine(msg: msg);
+        response = await FlutterShareMe.shareToLine(msg: msg);
         break;
       case Share.check_installed_apps:
-        final result = await flutterShareMe.checkInstalledAppsForShare();
+        final result = await FlutterShareMe.checkInstalledAppsForShare();
         print('installedApps $result');
         break;
     }

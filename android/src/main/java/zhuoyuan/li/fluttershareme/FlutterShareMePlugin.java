@@ -514,13 +514,12 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
             //Intent i = new Intent(this);
             //targetedShareIntents.add(i);
 
-            Intent chooserIntent = Intent.createChooser(
-                    targetedShareIntents.remove(0), "Select how to share");
-
-            chooserIntent.putExtra(
-                    Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(new Parcelable[]{}));
-
             try {
+                Intent chooserIntent = Intent.createChooser(
+                        targetedShareIntents.remove(0), "Select how to share");
+
+                chooserIntent.putExtra(
+                        Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(new Parcelable[]{}));
                 activity.startActivity(chooserIntent);
                 result.success("Success");
             } catch (ActivityNotFoundException e) {
