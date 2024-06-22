@@ -15,7 +15,9 @@ enum Share {
   share_instagram,
   share_telegram,
   share_line,
-  check_installed_apps
+  check_installed_apps,
+  share_messenger,
+  share_discord,
 }
 
 void main() => runApp(MyApp());
@@ -39,49 +41,59 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Container(
           width: double.infinity,
-          child: Column(
-            children: <Widget>[
-              const SizedBox(height: 30),
-              ElevatedButton(onPressed: pickImage, child: Text('Pick Image')),
-              ElevatedButton(onPressed: pickVideo, child: Text('Pick Video')),
-              ElevatedButton(onPressed: () => onButtonTap(Share.twitter), child: const Text('share to twitter')),
-              ElevatedButton(
-                onPressed: () => onButtonTap(Share.whatsapp),
-                child: const Text('share to WhatsApp'),
-              ),
-              ElevatedButton(
-                onPressed: () => onButtonTap(Share.whatsapp_business),
-                child: const Text('share to WhatsApp Business'),
-              ),
-              ElevatedButton(
-                onPressed: () => onButtonTap(Share.whatsapp_personal),
-                child: const Text('share to WhatsApp Personal'),
-              ),
-              ElevatedButton(
-                onPressed: () => onButtonTap(Share.facebook),
-                child: const Text('share to  FaceBook'),
-              ),
-              ElevatedButton(
-                onPressed: () => onButtonTap(Share.share_instagram),
-                child: const Text('share to Instagram'),
-              ),
-              ElevatedButton(
-                onPressed: () => onButtonTap(Share.share_telegram),
-                child: const Text('share to Telegram'),
-              ),
-              ElevatedButton(
-                onPressed: () => onButtonTap(Share.share_system),
-                child: const Text('share to System'),
-              ),
-              ElevatedButton(
-                onPressed: () => onButtonTap(Share.share_line),
-                child: const Text('share to Line'),
-              ),
-              ElevatedButton(
-                onPressed: () => onButtonTap(Share.check_installed_apps),
-                child: const Text('Check Installed Apps'),
-              ),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                const SizedBox(height: 30),
+                ElevatedButton(onPressed: pickImage, child: Text('Pick Image')),
+                ElevatedButton(onPressed: pickVideo, child: Text('Pick Video')),
+                ElevatedButton(onPressed: () => onButtonTap(Share.twitter), child: const Text('share to twitter')),
+                ElevatedButton(
+                  onPressed: () => onButtonTap(Share.whatsapp),
+                  child: const Text('share to WhatsApp'),
+                ),
+                ElevatedButton(
+                  onPressed: () => onButtonTap(Share.whatsapp_business),
+                  child: const Text('share to WhatsApp Business'),
+                ),
+                ElevatedButton(
+                  onPressed: () => onButtonTap(Share.whatsapp_personal),
+                  child: const Text('share to WhatsApp Personal'),
+                ),
+                ElevatedButton(
+                  onPressed: () => onButtonTap(Share.facebook),
+                  child: const Text('share to  FaceBook'),
+                ),
+                ElevatedButton(
+                  onPressed: () => onButtonTap(Share.share_instagram),
+                  child: const Text('share to Instagram'),
+                ),
+                ElevatedButton(
+                  onPressed: () => onButtonTap(Share.share_telegram),
+                  child: const Text('share to Telegram'),
+                ),
+                ElevatedButton(
+                  onPressed: () => onButtonTap(Share.share_system),
+                  child: const Text('share to System'),
+                ),
+                ElevatedButton(
+                  onPressed: () => onButtonTap(Share.share_line),
+                  child: const Text('share to Line'),
+                ),
+                ElevatedButton(
+                  onPressed: () => onButtonTap(Share.share_messenger),
+                  child: const Text('share to Messenger'),
+                ),
+                ElevatedButton(
+                  onPressed: () => onButtonTap(Share.share_discord),
+                  child: const Text('share to Discord'),
+                ),
+                ElevatedButton(
+                  onPressed: () => onButtonTap(Share.check_installed_apps),
+                  child: const Text('Check Installed Apps'),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -137,7 +149,7 @@ class _MyAppState extends State<MyApp> {
             message: msg, phoneNumber: 'phone-number-with-country-code');
         break;
       case Share.share_instagram:
-        response = await FlutterShareMe.shareToInstagramNew(msg: msg);
+        response = await FlutterShareMe.shareToInstagram(filePath: file!.path);
         break;
       case Share.share_telegram:
         response = await FlutterShareMe.shareToTelegram(msg: msg);
@@ -148,6 +160,12 @@ class _MyAppState extends State<MyApp> {
       case Share.check_installed_apps:
         final result = await FlutterShareMe.checkInstalledAppsForShare();
         print('installedApps $result');
+        break;
+      case Share.share_messenger:
+        response = await FlutterShareMe.shareToMessengerNew(msg: msg);
+        break;
+      case Share.share_discord:
+        response = await FlutterShareMe.shareToDiscord(msg: msg);
         break;
     }
     debugPrint(response);

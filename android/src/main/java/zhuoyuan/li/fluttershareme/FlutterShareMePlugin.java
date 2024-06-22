@@ -66,6 +66,7 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
     final private static String _methodTelegramShare = "telegram_share";
     final private static String _methodLineShare = "line_share";
     final private static String _methodCheckInstalledApps = "check_installed_apps";
+    final private static String _methodDiscordShare = "discord_share";
 
 
     private Activity activity;
@@ -171,6 +172,10 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
                 break;
             case _methodCheckInstalledApps:
                 checkInstalledApps(result);
+                break;
+            case _methodDiscordShare:
+                msg = call.argument("msg");
+                shareToDiscord(msg, result);
                 break;
             default:
                 result.notImplemented();
@@ -585,6 +590,23 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
             apps.put(appName, isInstalled);
         }
         result.success(apps);
+    }
+
+    private void shareToDiscord(String msg, Result result) {
+        try {
+            Intent telegramIntent = new Intent(Intent.ACTION_SEND);
+            telegramIntent.setType("text/plain");
+            telegramIntent.setPackage("com.discord");
+            telegramIntent.putExtra(Intent.EXTRA_TEXT, msg);
+            try {
+                activity.startActivity(telegramIntent);
+                result.success("true");
+            } catch (Exception ex) {
+                result.success("false:Discord app is not installed on your device");
+            }
+        } catch (Exception var9) {
+            result.error("error", var9.toString(), "");
+        }
     }
 
     @Override
