@@ -582,6 +582,8 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
         appPackages.put("whatsapp", "com.whatsapp");
         appPackages.put("telegram", "org.telegram.messenger");
         appPackages.put("line", "jp.naver.line.android");
+        appPackages.put("discord", "com.discord");
+        appPackages.put("snapchat", "com.snapchat.android");
 
         for (Map.Entry<String, String> entry : appPackages.entrySet()) {
             String appName = entry.getKey();
@@ -600,12 +602,12 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
 
     private void shareToDiscord(String msg, Result result) {
         try {
-            Intent telegramIntent = new Intent(Intent.ACTION_SEND);
-            telegramIntent.setType("text/plain");
-            telegramIntent.setPackage("com.discord");
-            telegramIntent.putExtra(Intent.EXTRA_TEXT, msg);
+            Intent discordIntent = new Intent(Intent.ACTION_SEND);
+            discordIntent.setType("text/plain");
+            discordIntent.setPackage("com.discord");
+            discordIntent.putExtra(Intent.EXTRA_TEXT, msg);
             try {
-                activity.startActivity(telegramIntent);
+                activity.startActivity(discordIntent);
                 result.success("true");
             } catch (Exception ex) {
                 result.success("false:Discord app is not installed on your device");
@@ -617,13 +619,13 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
 
     private void shareToSnapchat(String msg, Result result) {
         try {
-            Intent telegramIntent = new Intent(Intent.ACTION_SEND);
-            telegramIntent.setType("text/plain");
+            Intent snapchatIntent = new Intent(Intent.ACTION_SEND);
+            snapchatIntent.setType("text/plain");
             ComponentName intentComponent = new ComponentName("com.snapchat.android", "com.snapchat.android.LandingPageActivity");
-            telegramIntent.putExtra(Intent.EXTRA_TEXT, msg);
-            telegramIntent.setComponent(intentComponent);
+            snapchatIntent.putExtra(Intent.EXTRA_TEXT, msg);
+            snapchatIntent.setComponent(intentComponent);
             try {
-                activity.startActivity(telegramIntent);
+                activity.startActivity(snapchatIntent);
                 result.success("true");
             } catch (Exception ex) {
                 result.success("false:Snapchat app is not installed on your device");
