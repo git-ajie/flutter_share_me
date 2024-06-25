@@ -23,6 +23,7 @@ class FlutterShareMe {
   static const String _methodLineShare = 'line_share';
   static const String _methodCheckInstalledApps = 'check_installed_apps';
   static const String _methodDiscordShare = 'discord_share';
+  static const String _methodSnapchatShare = 'snapchat_share';
 
   ///share to WhatsApp
   /// [imagePath] is local image
@@ -244,6 +245,20 @@ class FlutterShareMe {
 
     try {
       result = await _channel.invokeMethod<String>(_methodDiscordShare, arguments);
+    } catch (e) {
+      return e.toString();
+    }
+    return result;
+  }
+
+  static Future<String?> shareToSnapchat({required String msg}) async {
+    final Map<String, dynamic> arguments = <String, dynamic>{};
+    arguments.putIfAbsent('msg', () => msg);
+
+    String? result;
+
+    try {
+      result = await _channel.invokeMethod<String>(_methodSnapchatShare, arguments);
     } catch (e) {
       return e.toString();
     }

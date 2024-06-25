@@ -18,6 +18,7 @@ enum Share {
   check_installed_apps,
   share_messenger,
   share_discord,
+  share_snapchat,
 }
 
 void main() => runApp(MyApp());
@@ -87,6 +88,10 @@ class _MyAppState extends State<MyApp> {
                 ElevatedButton(
                   onPressed: () => onButtonTap(Share.share_discord),
                   child: const Text('share to Discord'),
+                ),
+                ElevatedButton(
+                  onPressed: () => onButtonTap(Share.share_snapchat),
+                  child: const Text('share to Snapchat'),
                 ),
                 ElevatedButton(
                   onPressed: () => onButtonTap(Share.check_installed_apps),
@@ -166,6 +171,9 @@ class _MyAppState extends State<MyApp> {
         break;
       case Share.share_discord:
         response = await FlutterShareMe.shareToDiscord(msg: msg);
+        break;
+      case Share.share_snapchat:
+        response = await FlutterShareMe.shareToSnapchat(msg: msg);
         break;
     }
     debugPrint(response);
